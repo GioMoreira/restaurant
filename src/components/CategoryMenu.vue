@@ -104,5 +104,25 @@ export default {
       }
     }
   }
+
+  @media @tablets{
+    width: 100%;
+    height: fit-content;
+
+    ul {
+      display: flex;
+      justify-content: center; //consertar no smartphone
+      margin: 20px;
+      overflow: scroll;
+
+      li {
+        min-width: 78px;
+      }
+    }
+
+  }
 }
+
+
+
 </style>
