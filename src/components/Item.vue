@@ -46,11 +46,13 @@ export default {
   position: relative;
   margin: 20px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 
   &--name {
     font-weight: 600;
     font-size: 18px;
-    margin: 8px auto;
+    margin: 0;
   }
 
   &--description {
@@ -64,7 +66,7 @@ export default {
     font-weight: 600;
     font-size: 18px;
     color: @yellow;
-    margin: 8px auto;
+    margin:0;
   }
 
   &--tag {
@@ -85,23 +87,34 @@ export default {
     width: 100%;
   }
 
+  .content{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 10px;
+
+  }
+
   @media @tablets {
     width: 100%;
+    max-width: 100%;
     height: fit-content;
     border: 1px solid @light-grey;
     display: flex;
+    flex-direction: row;
     margin: 10px 0;
-    padding: 5px 10px;
+    padding: 10px 20px;
 
     &--img {
-      height: 60px;
+      width: 86px;
       order: 0;
-      margin: 0 0 10px 0;
+      margin: 0 0 5px 0;
     }
 
     &--price {
       text-align: right;
-      margin: 0 auto;
+      margin: 10px 0 0 auto;
     }
 
     &--tag {
@@ -119,8 +132,10 @@ export default {
     }
 
     .content {
-      width: 100%;
+      flex-grow: 1; // responsavel por alinhar os prices
     }
+
+
   }
 }
 </style>

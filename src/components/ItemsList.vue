@@ -38,7 +38,7 @@ export default {
           this.ItemsList = response.data;
           this.isLoading = false;
         });
-      },2000);
+      },1500);
     },
   },
   watch: {
@@ -53,11 +53,12 @@ export default {
 .items-list {
   margin: 50px;
   display: flex;
-width: 100%;
+  width: 100%;
 
   @media @tablets {
     flex-wrap: wrap;
-    margin: 20px;
+    margin: 0px;
+    padding: 20px;
   }
 }
 </style>
