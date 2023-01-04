@@ -1,10 +1,15 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
   <div class="item">
-    <div class="item--img-container">
-        <img class="item--img" :src="imagePath" alt="" />
+    <div class="item--quantity">
+      <button class="buttons" @click="decreaseQuantity(item.id)" :disabled="item.quantity == 0">-</button>
+      <span class="number">{{ item.quantity }}</span>
+      <button class="buttons" @click="increaseQuantity(item.id)">+</button>
     </div>
-    
+    <div class="item--img-container">
+      <img class="item--img" :src="imagePath" alt="" />
+    </div>
+
     <div class="content">
       <h3 class="item--name">{{ item.name }}</h3>
       <a class="item--observation">Adicionar observação</a>
@@ -14,23 +19,28 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "CartItem",
   props: {
     item: {},
   },
   filters: {
-        currency(value) {
-            return `R$ ${value.toFixed(2).replace('.',',')}`
-        }
+    currency(value) {
+      return `R$ ${value.toFixed(2).replace(".", ",")}`;
     },
+  },
   computed: {
-    selectedCategory() {
-      return this.$store.state.selectedCategory;
-    },
     imagePath() {
-      return require(`../assets/images/${this.selectedCategory}/${this.item.id}.png`);
+      return require(`../assets/images/${this.item.id}.png`);
     },
+  },
+  methods: {
+    ...mapActions([
+        'increaseQuantity',
+        'decreaseQuantity'
+    ])
   },
 };
 </script>
@@ -40,6 +50,27 @@ export default {
   display: flex;
   padding: 20px 0;
   border-bottom: 1px solid @light-grey;
+
+  &--quantity {
+    display: flex;
+    align-items: center;
+    padding-right: 40px;
+    font-size: 18px;
+
+    .number {
+      font-weight: 500;
+      color: @yellow;
+      width: 28px;
+      text-align: center;
+    }
+
+    .buttons {
+      font-weight: 600;
+      cursor: pointer;
+      background: none;
+      border: 0;
+    }
+  }
 
   &--img-container {
     border-radius: 8px;
