@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <div class="cart">
+        <router-link to="/" class="cart--go-back" >←️ Voltar</router-link>
         <h2 class="cart--title">Seu pedido</h2>
         <CartItem 
         v-for="item in cartList" 
@@ -12,12 +13,12 @@
 
 <script>
 import CartItem from './CartItem.vue';
-
     export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: "Cart",
     component: {
         CartItem,
+        
     },
     computed: {
         cartList() {
@@ -38,6 +39,29 @@ import CartItem from './CartItem.vue';
     &--title {
         font-weight: 600;
         font-size: 24px;
+        margin-top: 50px;
     }
+
+    &--go-back {
+        display: none;
+        font-weight: 600;
+        font-size: 18px;
+        text-decoration: none;
+        color: black;
+    }
+
+    
+
+    @media @tablets {
+        width: 100%;
+        min-width: unset;
+        padding: 50px 20px 20px;
+
+        &--go-back {
+        display: flex;
+    }
+    }
+
+   
 }
 </style>

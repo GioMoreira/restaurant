@@ -116,9 +116,10 @@ export default {
 
     ul {
       display: flex;
-      justify-content: center; //consertar no smartphone
-      margin: 20px;
+      width: fit-content;
+      margin: 20px auto;
       overflow: scroll;
+      
 
       li {
         min-width: 78px;

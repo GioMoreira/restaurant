@@ -47,6 +47,7 @@ export default {
 
 <style lang="less" scoped>
 .item {
+
   display: flex;
   padding: 20px 0;
   border-bottom: 1px solid @light-grey;
@@ -108,6 +109,33 @@ export default {
   .content {
     flex-grow: 1;
     padding: 0 20px;
+  }
+
+  @media @tablets {
+
+    flex-wrap: wrap;
+
+    &--img-container {
+      order: 1;
+    }
+
+    .content {
+      order: 2;
+      padding: 0 0 0 20px;
+    }
+
+    &--quantity {
+      order: 3;
+      padding: 0;
+      width: 81px;
+      justify-content: center;
+    }
+
+    &--price {
+      order: 4;
+      padding: 0 20px;
+      margin: 5px 0;
+    }
   }
 }
 </style>
