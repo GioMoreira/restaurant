@@ -14,11 +14,15 @@
 </template>
 
 <script>
+import Mixin from "@/mixins/mixins";
+
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: 'Item',
+    mixins: [Mixin],
     filters: {
         currency(value) {
+          if( !value) return;
             return `R$ ${value.toFixed(2).replace('.',',')}`
         }
     },
@@ -27,14 +31,21 @@ export default {
         item: {}
     },
     computed: {
-
         imagePath(){
+            if(!this.item?.id) return;
             return require(`../assets/images/${this.item.id}.png`);
         }
     },
     methods: {
       addToCart() {
-        this.$store.dispatch('addToCart', this.item);
+        
+        if(this.isDesktop()) {
+          this.$store.dispatch('addToCart', this.item);
+          return;
+        } 
+
+        //se for mobile
+        this.$router.push({ name: 'AddToCart', params: { id: this.item.id } })
       }
     },
 }
