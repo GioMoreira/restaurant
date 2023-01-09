@@ -8,6 +8,7 @@
     </div>
     <p class="add-cart--observations">Observações:</p>
     <textarea v-model="observations" rows="10"></textarea>
+    <button class="primary-button" @click="onAddToCartButtonClick()">Adiconar ao carrinho</button>
   </div>
 </template>
 
@@ -42,6 +43,12 @@ export default {
          this.item = { quantity: 1, ...response.data};
         // this.isLoading = false;
       });
+  },
+  methods: {
+    onAddToCartButtonClick() {
+        this.$store.dispatch('addToCart', this.item);
+        this.$router.push({name: 'home'})
+    }
   },
 };
 </script>
@@ -85,6 +92,14 @@ export default {
     border: 1px solid @light-grey;
     border-radius: 8px;
 
+  }
+
+  .primary-button {
+    width: calc(100% - 40px);
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    right: 20px;
   }
 }
 </style>
