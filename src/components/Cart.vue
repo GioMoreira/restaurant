@@ -8,22 +8,32 @@
         :key="item.id" 
         :item="item"
         />
+        <div class="cart--total">
+            <span>Total: </span>
+            <span class="price">{{ getCartTotal | currency }}</span>
+        </div>
     </div>
 </template>
 
 <script>
 import CartItem from './CartItem.vue';
+import { mapGetters } from 'vuex'
+
     export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: "Cart",
-    component: {
-        CartItem,
-        
+    filters: {
+        currency(value) {
+        return `R$ ${value.toFixed(2).replace(".", ",")}`;
+        },
     },
     computed: {
         cartList() {
             return this.$store.state.cartList;
-        }
+        },
+        ...mapGetters([
+            'getCartTotal'
+        ])
     },
     components: { CartItem }
 }
@@ -48,6 +58,18 @@ import CartItem from './CartItem.vue';
         font-size: 18px;
         text-decoration: none;
         color: black;
+    }
+
+    &--total {
+        font-weight: 600;
+        font-size: 18px;
+        text-align: right;
+        margin-top: 30px;
+
+        .price {
+            color: @yellow;
+            padding-left: 10px;
+        }
     }
 
     

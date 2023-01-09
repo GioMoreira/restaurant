@@ -42,5 +42,12 @@ export const store = new Vuex.Store({
 
       commit('decreaseQuantity', index);
     }
+  },
+  getters: {
+    getCartTotal: state => {
+      return state.cartList.reduce( (acc, item) => {
+        return acc + (item.price * item.quantity)
+      }, 0)
+    }
   }
 })
