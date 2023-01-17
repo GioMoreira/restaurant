@@ -26,6 +26,10 @@ export const store = new Vuex.Store({
       state.cartList.splice(index, 1);
     },
 
+    addObservation(state, {index, observations}) {
+      state.cartList[index].observations = observations;
+    },
+
     // AUMENTA A QUANTIDADE NO CARRINHO
     increaseQuantity(state, {index, quantity=1}) {
       state.cartList[index].quantity += quantity;
@@ -54,6 +58,14 @@ export const store = new Vuex.Store({
         index: index, 
         quantity: el?.quantity || 1 
       });
+
+      if(el.observations) {
+        commit('addObservation', {
+          index: index,
+          observations: el.observations
+        })
+      }
+
     },
 
     removeFromCart({ state, commit }, id) {
@@ -70,7 +82,15 @@ export const store = new Vuex.Store({
 
       commit("decreaseQuantity", index);
     },
-  },
+
+    addObservation({state, commit}, el){
+      const index = state.cartList.findIndex((cartItem) => cartItem.id === el.id);
+      commit('addObservation', {
+        index: index,
+        observations: el.observations
+      })
+    }
+  }, 
   getters: {
     getCartTotal: (state) => {
       return state.cartList.reduce((acc, item) => {

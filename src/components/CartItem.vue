@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
   <div class="item">
@@ -9,20 +10,38 @@
 
     <div class="content">
       <h3 class="item--name">{{ item.name }}</h3>
-      <a class="item--observation">Adicionar observação</a>
+      <a class="item--observation" @click="onShowObservationModal">Adicionar observação</a>
+      <p class="item--observation-text">{{ item.observations }}</p>
     </div>
     <p class="item--price">{{ item.price | currency }}</p>
+
+    <Modal :show="showObservationModal" @on-modal-close="onCloseObservationModal">
+      <div class="modal-content">
+        <h1>Adicionar Observação</h1>
+        <textarea v-model="item.observations" rows="8"></textarea>
+        <button @click="onCloseObservationModal" class="secondary-button">Cancelar</button>
+        <button @click="saveObservation" class="primary-button">Salvar</button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import Modal from "./Modal.vue";
 import Quantity from "./Quantity.vue";
+
 
 export default {
   name: "CartItem",
   components: {
     Quantity,
+    Modal
+  },
+  data() {
+    return {
+      showObservationModal: false
+    };
   },
   props: {
     item: {},
@@ -39,6 +58,18 @@ export default {
   },
   methods: {
     ...mapActions(["increaseQuantity", "decreaseQuantity"]),
+
+    onShowObservationModal() {
+      this.showObservationModal = true
+    }, 
+
+    onCloseObservationModal() {
+      this.showObservationModal = false
+    },
+    saveObservation() {
+      this.$store.dispatch('addObservation', this.item);
+      this.showObservationModal = false
+    }
   },
 };
 </script>
@@ -92,8 +123,11 @@ export default {
   }
 
   &--observation {
+    font-size: 12px;
+    font-weight: 500;
     color: @dark-grey;
     text-decoration: underline;
+    cursor: pointer;
   }
 
   &--price {
@@ -103,9 +137,27 @@ export default {
     color: @yellow;
   }
 
+  &--observation-text {
+    font-size: 12px;
+    color: @dark-grey;
+  }
+
   .content {
     flex-grow: 1;
     padding: 0 20px;
+  }
+
+  .modal-content {
+    text-align: center;
+
+    textarea{
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    button + button{
+      margin-left: 15px;
+    }
   }
 
   @media @tablets {
@@ -131,6 +183,12 @@ export default {
       order: 4;
       padding: 0 20px;
       margin: 5px 0;
+    }
+
+    .modal-content {
+      h1 {
+        font-size: 20px;
+      }
     }
   }
 }
