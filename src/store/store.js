@@ -8,20 +8,36 @@ export const store = new Vuex.Store({
     selectedCategory: "",
     cartList: [],
   },
-  mutations: {
+
+  // MUTATIONS É ONDE MUDAMOS O STATE
+  mutations: { 
+    //SELECIONA CATEGORIA
     changeCategory(state, id) {
       state.selectedCategory = id;
     },
+
+    //ADD ITEM AO CARRINHO
     addToCart(state, el) {
       state.cartList.push({ ...el, quantity: el?.quantity || 1 }); // vai pegar o elemnto.quantity caso haja, senão (se for undefined/0), coloca 1
     },
+
+    // REMOVE ITEM DO CARRINHO
+    removeFromCart(state, index) {
+      state.cartList.splice(index, 1);
+    },
+
+    // AUMENTA A QUANTIDADE NO CARRINHO
     increaseQuantity(state, {index, quantity=1}) {
       state.cartList[index].quantity += quantity;
     },
+
+    // DIMINUI A QUANTIDADE NO CARRINHO
     decreaseQuantity(state, index) {
       --state.cartList[index].quantity;
     },
   },
+
+ // ACTIONS É ONDE IREMOS COMMITAR AS MUTATIONS (tbm pode conter operações assíncronas)
   actions: {
     changeCategory(context, id) {
       context.commit("changeCategory", id);
@@ -39,6 +55,12 @@ export const store = new Vuex.Store({
         quantity: el?.quantity || 1 
       });
     },
+
+    removeFromCart({ state, commit }, id) {
+      const index = state.cartList.findIndex((cartItem) => cartItem.id === id);
+      if(index != -1) commit('removeFromCart', index);
+    },
+
     increaseQuantity({ state, commit }, id) {
       const index = state.cartList.findIndex((cartItem) => cartItem.id === id);
       commit("increaseQuantity", {index: index});
