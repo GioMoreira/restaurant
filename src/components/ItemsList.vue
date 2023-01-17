@@ -40,7 +40,7 @@ export default {
           this.ItemsList = response.data;
           this.isLoading = false;
         });
-      },1500);
+      },750);
     },
   },
   watch: {

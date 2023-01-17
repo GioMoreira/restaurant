@@ -5,15 +5,17 @@
       >←️ Voltar</router-link
     >
     <h2 class="cart--title">Seu pedido</h2>
-    <p v-if="hasNoItems">Seu carrinho ainda está vazio ...</p>
-    <transition-group name="list">
-      <CartItem v-for="item in cartList" :key="item.id" :item="item" />
-    </transition-group>
-    <div class="cart--total" v-if="!hasNoItems">
-      <span>Total: </span>
-      <span class="price">{{ getCartTotal | currency }}</span>
+    <div class="cart--content">
+      <p v-if="hasNoItems">Seu carrinho ainda está vazio ...</p>
+      <transition-group name="list">
+        <CartItem v-for="item in cartList" :key="item.id" :item="item" />
+      </transition-group>
     </div>
-    
+    <div class="cart--total" v-if="!hasNoItems">
+        <span>Total: </span>
+        <span class="price">{{ getCartTotal | currency }}</span>
+      </div>
+    <button class="primary-button payment-button" @click="goToPayment">Finalizar compra</button>
   </div>
 </template>
 
@@ -21,8 +23,7 @@
 import CartItem from "./CartItem.vue";
 import { mapGetters } from "vuex";
 import Mixin from "@/mixins/mixins";
-import feather from 'feather-icons'
-
+import feather from "feather-icons";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -33,7 +34,7 @@ export default {
       return `R$ ${value.toFixed(2).replace(".", ",")}`;
     },
   },
-  
+
   computed: {
     cartList() {
       return this.$store.state.cartList;
@@ -43,11 +44,16 @@ export default {
       return !this.cartList.length;
     },
     circleIcon() {
-       return feather.icons.circle.toSvg()
+      return feather.icons.circle.toSvg();
     },
   },
-  components: { 
+  components: {
     CartItem,
+  },
+  methods: {
+    goToPayment() {
+      this.$router.push({name: 'Payment'})
+    }
   },
 };
 </script>
@@ -56,8 +62,16 @@ export default {
 .cart {
   background: white;
   min-width: 643px;
+  height: 100vh;
   width: 643px;
   padding: 50px;
+  display: flex;
+  flex-direction: column;
+
+  &--content {
+    flex-grow: 1;
+    overflow: auto;
+  }
 
   &--title {
     font-weight: 600;
@@ -84,6 +98,10 @@ export default {
     }
   }
 
+  .payment-button {
+    width: 390px;
+    margin: 20px auto;
+  }
   .list-item {
     display: inline-block;
     margin-right: 10px;
@@ -101,6 +119,10 @@ export default {
     width: 100%;
     min-width: unset;
     padding: 50px 20px 20px;
+
+    .payment-button {
+    width: 100%;
+  }
   }
 }
 </style>
