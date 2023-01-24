@@ -15,7 +15,7 @@
             :class="{ error: !formData.name.valid }"
           />
           <!-- blur faz a validação assim q o user termina de preencher o campo, para já
-      tirar msg de erro da tela -->
+          tirar msg de erro da tela -->
 
           <p class="error-message" v-if="!formData.name.valid">
             {{ formData.name.errorMessage }}
@@ -33,7 +33,7 @@
             :class="{ error: !formData.cellphone.valid }"
           />
           <!-- blur faz a validação assim q o user termina de preencher o campo, para já
-      tirar msg de erro da tela -->
+          tirar msg de erro da tela -->
 
           <p class="error-message" v-if="!formData.cellphone.valid">
             {{ formData.cellphone.errorMessage }}
@@ -44,26 +44,115 @@
       <div class="address">
         <p class="section-title">Endereço</p>
         <div class="delivery-type">
-            <div class="radio-option">
-                <input type="radio" name="delivery-type" id="store">
-                <label for="store">Retirar na loja</label>
-            </div>
+          <div class="radio-option">
+            <input type="radio" name="delivery-type" id="store" />
+            <label for="store">Retirar na loja</label>
+          </div>
 
-            <div class="radio-option">
-                <input type="radio" name="delivery-type" id="delivery" checked>
-                <label for="delivery">Delivery</label>
-            </div>
+          <div class="radio-option">
+            <input type="radio" name="delivery-type" id="delivery" checked />
+            <label for="delivery">Delivery</label>
+          </div>
         </div>
-        <a>Adicionar endereço</a>
-        
+        <a @click="onShowAddressModal">Adicionar endereço</a>
       </div>
     </form>
     <button class="primary-button" @click="orderItens">Concluir Pedido</button>
+
+    <Modal :show="showAddressModal" @on-modal-close="hideAdressModal">
+      <div class="modal-content">
+        <h1>Adicionar Endereço</h1>
+        <!-- CEP -->
+        <div class="input-field">
+          <label for="">{{ formData.cep.label }}</label>
+          <input
+            type="text"
+            :placeholder="formData.cep.placeholder"
+            v-mask="'#####-###'"
+            v-model="formData.cep.value"
+            @blur="formData.cep.isValid()"
+            :class="{ error: !formData.cep.valid }"
+          />
+          <!-- blur faz a validação assim q o user termina de preencher o campo, para já
+          tirar msg de erro da tela -->
+
+          <p class="error-message" v-if="!formData.cep.valid">
+            {{ formData.cep.errorMessage }}
+          </p>
+        </div>
+
+        <!-- CIDADE -->
+        <div class="input-field">
+          <label for="">{{ formData.city.label }}</label>
+          <input
+            type="text"
+            :placeholder="formData.city.placeholder"
+            v-model="formData.city.value"
+            @blur="formData.city.isValid()"
+            :class="{ error: !formData.city.valid }"
+          />
+          <!-- blur faz a validação assim q o user termina de preencher o campo, para já
+          tirar msg de erro da tela -->
+
+          <p class="error-message" v-if="!formData.city.valid">
+            {{ formData.city.errorMessage }}
+          </p>
+        </div>
+
+
+        <!-- ENDEREÇO RUA N° -->
+        <div class="address-container">
+          <!-- RUA -->
+          <div class="input-field">
+            <label for="">{{ formData.street.label }}</label>
+            <input
+              type="text"
+              :placeholder="formData.street.placeholder"
+              v-model="formData.street.value"
+              @blur="formData.street.isValid()"
+              :class="{ error: !formData.street.valid }"
+            />
+            <!-- blur faz a validação assim q o user termina de preencher o campo, para já
+            tirar msg de erro da tela -->
+
+            <p class="error-message" v-if="!formData.street.valid">
+              {{ formData.street.errorMessage }}
+            </p>
+          </div>
+
+          <!-- NÚMERO -->
+          <div class="input-field">
+            <label for="">{{ formData.number.label }}</label>
+            <input
+              type="text"
+              :placeholder="formData.number.placeholder"
+              v-model="formData.number.value"
+              @blur="formData.number.isValid()"
+              :class="{ error: !formData.number.valid }"
+            />
+            <!-- blur faz a validação assim q o user termina de preencher o campo, para já
+            tirar msg de erro da tela -->
+
+            <p class="error-message" v-if="!formData.number.valid">
+              {{ formData.number.errorMessage }}
+            </p>
+          </div>
+        </div>
+              
+        <button class="secondary-button" @click="hideAdressModal">Cancelar</button>
+        <button class="primary-button">Adicionar</button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
+import Modal from "@/components/Modal.vue";
+
 export default {
+  components: {
+    Modal,
+  },
   data() {
     return {
       formData: {
@@ -89,7 +178,52 @@ export default {
               this.formData.cellphone.value.length === 16;
           },
         },
+        cep: {
+          value: "",
+          placeholder: "Digite seu CEP",
+
+          errorMessage: "O CEP é obrigatório",
+          label: "CEP*",
+          valid: true,
+          isValid: () => {
+            this.formData.cep.valid = this.formData.cep.value.length;
+          },
+        },
+        city: {
+          value: "",
+          placeholder: "Digite sua cidade",
+
+          errorMessage: "A cidade obrigatória",
+          label: "Cidade*",
+          valid: true,
+          isValid: () => {
+            this.formData.city.valid = this.formData.city.value.length;
+          },
+        },
+        street: {
+          value: "",
+          placeholder: "Digite sua rua",
+
+          errorMessage: "A rua obrigatória",
+          label: "Rua*",
+          valid: true,
+          isValid: () => {
+            this.formData.street.valid = this.formData.street.value.length;
+          },
+        },
+        number: {
+          value: "",
+          placeholder: "Digite o número",
+
+          errorMessage: "O número é obrigatório",
+          label: "Número*",
+          valid: true,
+          isValid: () => {
+            this.formData.number.valid = this.formData.number.value.length;
+          },
+        },
       },
+      showAddressModal: false,
     };
   },
   methods: {
@@ -100,6 +234,14 @@ export default {
 
     orderItens() {
       this.triggerValidations();
+    },
+
+    onShowAddressModal() {
+      this.showAddressModal = true;
+    },
+
+    hideAdressModal() {
+      this.showAddressModal = false;
     },
   },
 };
@@ -113,20 +255,27 @@ export default {
   border-radius: 8px;
   padding: 30px 50px;
 
-  form {
+  .address-container {
+    display: flex;
+    margin-top: 15px;
+    gap: 15px;
     .input-field {
-      display: flex;
-      flex-direction: column;
-
-      & + .input-field {
-        margin-top: 15px;
-      }
+      margin: 0 !important;
+      width: 100%;
     }
 
-    .section-title {
-      font-weight: 600;
-      font-size: 22px;
-      margin-bottom: 20px;
+    .input-field:last-child {
+      width: 30%;
+    }
+
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+
+    & + .input-field {
+      margin-top: 15px;
     }
 
     label {
@@ -134,6 +283,16 @@ export default {
       font-size: 16px;
       margin-bottom: 5px;
     }
+  }
+
+  form {
+    .section-title {
+      font-weight: 600;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+
 
     .error-message {
       font-size: 12px;
@@ -141,38 +300,46 @@ export default {
     }
 
     .address {
-        .delivery-type {
-        display: flex;     
-        }
-        
-        a {
-            color: @pink;
-            font-weight: normal;
-            font-size: 12px;
-            text-decoration: underline;
-            cursor: pointer;
-        }
+      .delivery-type {
+        display: flex;
+      }
+
+      a {
+        color: @pink;
+        font-weight: normal;
+        font-size: 12px;
+        text-decoration: underline;
+        cursor: pointer;
+      }
     }
 
-
-
     .radio-option {
-        display: flex;
-        align-items: center;
+      display: flex;
+      align-items: center;
 
-        & + .radio-option {
-            margin-left: 45px;
-        }
+      & + .radio-option {
+        margin-left: 45px;
+      }
 
-        label {
-            padding-left: 7px ;
-            margin: 0;
-        }
+      label {
+        padding-left: 7px;
+        margin: 0;
+      }
     }
   }
 
   button {
     margin: 30px auto;
+  }
+
+  .modal-content {
+    button {
+      text-align: center;
+    }
+
+    button + button {
+      margin-left: 15px;
+    }
   }
 }
 </style>
