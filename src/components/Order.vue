@@ -420,5 +420,23 @@ export default {
       margin-left: 15px;
     }
   }
+
+  @media @tablets {
+    width: 100%;
+    padding: 0;
+
+    .modal-content {
+    button + button {
+      margin-left: 5px;
+    }
+  }
+
+  .address-container {
+    gap: 5px;
+  }
+
+  }
+
+
 }
 </style>
