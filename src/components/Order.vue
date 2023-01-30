@@ -45,22 +45,40 @@
         <p class="section-title">Endereço</p>
         <div class="radio-container">
           <div class="radio-option">
-            <input type="radio" name="delivery-type" id="store" value="store" v-model="deliveryType" />
+            <input
+              type="radio"
+              name="delivery-type"
+              id="store"
+              value="store"
+              v-model="deliveryType"
+            />
             <label for="store">Retirar na loja</label>
           </div>
 
           <div class="radio-option">
-            <input type="radio" name="delivery-type" id="delivery" value="delivery" checked v-model="deliveryType"/>
+            <input
+              type="radio"
+              name="delivery-type"
+              id="delivery"
+              value="delivery"
+              checked
+              v-model="deliveryType"
+            />
             <label for="delivery">Delivery</label>
           </div>
         </div>
 
-        <div class="address-card" v-if="isDeliveryType && hasAddressInfo && savedAddress">
-          <p>{{ formData.street.value }}, {{ formData.number.value }}</p> 
+        <div
+          class="address-card"
+          v-if="isDeliveryType && hasAddressInfo && savedAddress"
+        >
+          <p>{{ formData.street.value }}, {{ formData.number.value }}</p>
           <p>{{ formData.city.value }} - {{ formData.cep.value }}</p>
         </div>
 
-        <a @click="onShowAddressModal" v-if="isDeliveryType">{{addressButtonLabel}}</a>
+        <a @click="onShowAddressModal" v-if="isDeliveryType">{{
+          addressButtonLabel
+        }}</a>
       </div>
 
       <div class="user-payment">
@@ -68,12 +86,25 @@
         <p>Método de pagamento:</p>
         <div class="radio-container">
           <div class="radio-option">
-            <input type="radio" name="payment-type" id="credit-card" value="credit-card" v-model="paymentType" />
+            <input
+              type="radio"
+              name="payment-type"
+              id="credit-card"
+              value="credit-card"
+              v-model="paymentType"
+            />
             <label for="credit-card">Cartão</label>
           </div>
 
           <div class="radio-option">
-            <input type="radio" name="payment-type" id="cash" value="cash" checked v-model="paymentType"/>
+            <input
+              type="radio"
+              name="payment-type"
+              id="cash"
+              value="cash"
+              checked
+              v-model="paymentType"
+            />
             <label for="cash">Dinheiro</label>
           </div>
         </div>
@@ -81,6 +112,7 @@
     </form>
     <button class="primary-button" @click="orderItens">Concluir Pedido</button>
 
+    <!-- MODAL ENDEREÇO -->
     <Modal :show="showAddressModal" @on-modal-close="hideAdressModal">
       <div class="modal-content">
         <h1>Adicionar Endereço</h1>
@@ -121,7 +153,6 @@
           </p>
         </div>
 
-
         <!-- ENDEREÇO RUA N° -->
         <div class="address-container">
           <!-- RUA -->
@@ -160,9 +191,32 @@
             </p>
           </div>
         </div>
-              
-        <button class="secondary-button" @click="hideAdressModal">Cancelar</button>
-        <button class="primary-button" @click="validateAddressForm">Adicionar</button>
+
+        <button class="secondary-button" @click="hideAdressModal">
+          Cancelar
+        </button>
+        <button class="primary-button" @click="validateAddressForm">
+          Adicionar
+        </button>
+      </div>
+    </Modal>
+
+    <!-- MODAL ENDEREÇO INVÁLIDO -->
+    <Modal
+      :show="showInvalidAddressModal"
+      @on-modal-close="hideInvalidAdressModal"
+    >
+      <div class="invalid-address-modal">
+        <span v-html="warningIcon" class="icon"></span>
+        <span>Para delivery é obrigatório adicionar um endereço válido.</span>
+      </div>
+    </Modal>
+
+    <!-- MODAL SUCESSO -->
+    <Modal :show="showSuccessModal" @on-modal-close="hideSuccessModal">
+      <div class="success-modal">
+        <span v-html="successIcon" class="icon"></span>
+        <span>Pedido realizado com sucesso.</span>
       </div>
     </Modal>
   </div>
@@ -170,6 +224,7 @@
 
 <script>
 import Modal from "@/components/Modal.vue";
+import feather from "feather-icons";
 
 export default {
   components: {
@@ -185,7 +240,7 @@ export default {
           label: "Nome*",
           valid: true,
           isValid: () => {
-            this.formData.name.valid = !!this.formData.name.value.length >= 3;
+            this.formData.name.valid = this.formData.name.value.length >= 3;
           },
         },
         cellphone: {
@@ -246,12 +301,20 @@ export default {
         },
       },
       showAddressModal: false,
-      deliveryType: 'store',
-      paymentType: 'credit-card',
+      deliveryType: "store",
+      paymentType: "credit-card",
       savedAddress: false,
+      showInvalidAddressModal: false,
+      showSuccessModal: false,
     };
   },
   computed: {
+    warningIcon() {
+      return feather.icons["alert-triangle"].toSvg();
+    },
+    successIcon() {
+      return feather.icons["check-circle"].toSvg();
+    },
     isAddressFormValid() {
       let isValid = true;
       isValid &= this.formData.city.valid;
@@ -260,24 +323,35 @@ export default {
       isValid &= this.formData.number.valid;
       return isValid;
     },
+    isUserFormDataValid() {
+      let isValid = true;
+      isValid &= this.formData.cellphone.valid;
+      isValid &= this.formData.name.valid;
+      return isValid;
+    },
     isDeliveryType() {
-      return this.deliveryType === 'delivery'
+      return this.deliveryType === "delivery";
     },
     hasAddressInfo() {
-      return this.formData.city.value ||
-      this.formData.street.value ||
-      this.formData.cep.value ||
-      this.formData.number.value
-
+      return (
+        this.formData.city.value ||
+        this.formData.street.value ||
+        this.formData.cep.value ||
+        this.formData.number.value
+      );
     },
     addressButtonLabel() {
-      return this.hasAddressInfo ? 'Editar endereço' : 'Adicionar Endereço';
-    }
+      return this.hasAddressInfo ? "Editar endereço" : "Adicionar Endereço";
+    },
   },
   methods: {
     triggerValidations() {
       this.formData.name.isValid();
       this.formData.cellphone.isValid();
+      if (this.isDeliveryType) {
+        this.triggerAddressFormValidations();
+        this.showInvalidAddressModal = !this.isAddressFormValid;
+      }
     },
 
     triggerAddressFormValidations() {
@@ -289,6 +363,22 @@ export default {
 
     orderItens() {
       this.triggerValidations();
+      if (!this.isUserFormDataValid || !this.isAddressFormValid) return;
+      this.showSuccessModal = true;
+      const phone = "5555999999999";
+      let text = `
+              Cliente: ${this.formData.name.value}
+              Contato: ${this.formData.cellphone.value}
+              Pedido:
+              ${this.$store.state.cartList.map((item) => {
+                return `
+                  ${item.quantity}x ${item.name}
+                  Obs: ${item.observations}
+                `;
+              })}
+            `;
+      text = window.encodeURIComponent(text);
+      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${text}`);
     },
 
     onShowAddressModal() {
@@ -298,12 +388,21 @@ export default {
     hideAdressModal() {
       this.showAddressModal = false;
     },
+
+    hideInvalidAdressModal() {
+      this.showInvalidAddressModal = false;
+    },
+
+    hideSuccessModal() {
+      this.$router.push({ name: "home" });
+    },
+
     validateAddressForm() {
       this.triggerAddressFormValidations();
-      if(!this.isAddressFormValid) return;
+      if (!this.isAddressFormValid) return;
       this.savedAddress = true;
       this.showAddressModal = false;
-    }
+    },
   },
 };
 </script>
@@ -328,7 +427,6 @@ export default {
     .input-field:last-child {
       width: 30%;
     }
-
   }
 
   .input-field {
@@ -339,7 +437,6 @@ export default {
       font-size: 12px;
       color: @error-color;
     }
-
 
     & + .input-field {
       margin-top: 15px;
@@ -360,11 +457,9 @@ export default {
     }
 
     .radio-container {
-        display: flex;
-      }
+      display: flex;
+    }
     .address {
-      
-
       a {
         color: @pink;
         font-weight: normal;
@@ -388,7 +483,6 @@ export default {
           color: @dark-grey;
           margin: 5px 0;
         }
-        
       }
     }
 
@@ -421,22 +515,31 @@ export default {
     }
   }
 
+  .invalid-address-modal,
+  .success-modal {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding-bottom: 20px;
+    .icon {
+      margin-bottom: 15px;
+    }
+  }
+
   @media @tablets {
     width: 100%;
     padding: 0;
 
     .modal-content {
-    button + button {
-      margin-left: 5px;
+      button + button {
+        margin-left: 5px;
+      }
+    }
+
+    .address-container {
+      gap: 5px;
     }
   }
-
-  .address-container {
-    gap: 5px;
-  }
-
-  }
-
-
 }
 </style>
