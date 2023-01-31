@@ -4,12 +4,14 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
+
+  // Objeto STATE que traz a category e os itens da cetgory
   state: {
     selectedCategory: "",
     cartList: [],
   },
 
-  // MUTATIONS É ONDE MUDAMOS O STATE
+  // MUTATIONS: ONDE MUDAMOS O STATE
   mutations: { 
     //SELECIONA CATEGORIA
     changeCategory(state, id) {
@@ -41,7 +43,7 @@ export const store = new Vuex.Store({
     },
   },
 
- // ACTIONS É ONDE IREMOS COMMITAR AS MUTATIONS (tbm pode conter operações assíncronas)
+ // ACTIONS: ONDE IREMOS COMMITAR AS MUTATIONS (tbm pode conter operações assíncronas)
   actions: {
     changeCategory(context, id) {
       context.commit("changeCategory", id);
@@ -91,6 +93,7 @@ export const store = new Vuex.Store({
       })
     }
   }, 
+
   getters: {
     getCartTotal: (state) => {
       return state.cartList.reduce((acc, item) => {

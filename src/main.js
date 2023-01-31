@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import App from './App.vue'
 import './assets/css/global.less'
 import router from './router'
-import 'es6-promise/auto'
+import 'es6-promise/auto' // o Vuex precisa de um promise
 import { store } from './store/store'
 import VueMask from 'v-mask'
 

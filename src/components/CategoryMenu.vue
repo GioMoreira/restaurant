@@ -5,7 +5,7 @@
         v-for="category in categoriesList"
         :key="category.id"
         @click="onCategoryClick(category.id)"
-        :class="{ 'active': isActive(category.id)}"
+        :class="{ active: isActive(category.id) }"
       >
         <component :is="category.icon"></component>
         <p>{{ category.label }}</p>
@@ -43,15 +43,15 @@ export default {
     };
   },
   mounted() {
-    this.onCategoryClick('pizza');
+    this.onCategoryClick("pizza");
   },
   methods: {
     onCategoryClick(id) {
       this.selectedCategory = id;
-      this.$store.dispatch('changeCategory', id);
+      this.$store.dispatch("changeCategory", id);
     },
     isActive(id) {
-        return this.selectedCategory === id;
+      return this.selectedCategory === id;
     },
   },
 };
@@ -87,9 +87,9 @@ export default {
         color: @dark-grey;
       }
 
-      svg{
+      svg {
         path {
-            fill: @dark-grey;
+          fill: @dark-grey;
         }
       }
 
@@ -97,46 +97,43 @@ export default {
         background: @yellow;
         border-radius: 8px;
 
-        p{
-            color: black;
+        p {
+          color: black;
         }
 
-        svg{
-            path {
-                fill: black;
-            }
-       } 
+        svg {
+          path {
+            fill: black;
+          }
+        }
       }
     }
   }
 
-  @media @small-desktops{
+  @media @small-desktops {
     width: 100%;
     max-width: 800px;
     height: fit-content;
     margin: auto;
 
+
     ul {
       display: flex;
       margin: 20px auto;
-      overflow: scroll;
+      overflow: hidden;
       justify-content: space-around;
-      
 
       li {
         min-width: 78px;
       }
     }
-
   }
 
   @media @smartphones {
     ul {
       justify-content: unset;
+      overflow: auto;
     }
   }
 }
-
-
-
 </style>

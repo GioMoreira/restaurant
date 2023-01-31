@@ -31,6 +31,7 @@ export default {
   mixins: [Mixin],
 };
 </script>
+
 <style scoped lang="less">
 .home {
   display: flex;
