@@ -1,9 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="cart">
-    <router-link to="/" class="cart--go-back" v-if="isSmallScreen()"
-      >←️ Voltar</router-link
-    >
+    <router-link to="/" class="cart--go-back">←️ Voltar</router-link>
     <h2 class="cart--title">Seu pedido</h2>
     <div class="cart--content">
       <p v-if="hasNoItems">Seu carrinho ainda está vazio ...</p>
@@ -12,10 +10,16 @@
       </transition-group>
     </div>
     <div class="cart--total" v-if="!hasNoItems">
-        <span>Total: </span>
-        <span class="price">{{ getCartTotal | currency }}</span>
-      </div>
-    <button class="primary-button payment-button" @click="goToPayment" v-if="cartList.length">Finalizar compra</button>
+      <span>Total: </span>
+      <span class="price">{{ getCartTotal | currency }}</span>
+    </div>
+    <button
+      class="primary-button payment-button"
+      @click="goToPayment"
+      v-if="cartList.length && !isPaymentScreen"
+    >
+      Finalizar compra
+    </button>
   </div>
 </template>
 
@@ -46,14 +50,17 @@ export default {
     circleIcon() {
       return feather.icons.circle.toSvg();
     },
+    isPaymentScreen() {
+      return this.$route.name === 'Payment'
+    },
   },
   components: {
     CartItem,
   },
   methods: {
     goToPayment() {
-      this.$router.push({name: 'Payment'})
-    }
+      this.$router.push({ name: "Payment" });
+    },
   },
 };
 </script>
@@ -80,10 +87,7 @@ export default {
   }
 
   &--go-back {
-    font-weight: 600;
-    font-size: 18px;
-    text-decoration: none;
-    color: black;
+    display: none;
   }
 
   &--total {
@@ -115,14 +119,24 @@ export default {
     transform: translateX(-30px);
   }
 
-  @media @tablets {
+  @media @small-desktops {
     width: 100%;
+    max-width: 800px;
+    margin: auto;
     min-width: unset;
     padding: 50px 20px 20px;
 
+    &--go-back {
+      display: block;
+      font-weight: 600;
+      font-size: 18px;
+      text-decoration: none;
+      color: black;
+    }
+
     .payment-button {
-    width: 100%;
-  }
+      width: 100%;
+    }
   }
 }
 </style>
